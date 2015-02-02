@@ -218,6 +218,19 @@ module RSpec
             wrapped.to_not receive(:foo).never
           }.to raise_error(/trying to negate it again/)
         end
+
+        it "will still fail the example of the exception raised immediately is caught" do
+          # see https://github.com/rspec/rspec-mocks/issues/874
+          expect {
+            begin
+              wrapped.not_to receive(:foo)
+              receiver.foo
+            rescue RSpec::Mocks::MockExpectationError
+              RSpec::Mocks.verify
+            end
+          }.to fail_with(/expected: 0 times with any arguments/)
+          reset receiver
+        end
       end
 
       shared_examples "resets partial mocks cleanly" do

@@ -43,6 +43,7 @@ module VerifyAndResetHelpers
   def with_unfulfilled_double
     d = double("double")
     yield d
+  ensure
     reset d
   end
 end
