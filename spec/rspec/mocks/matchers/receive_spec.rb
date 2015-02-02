@@ -186,6 +186,8 @@ module RSpec
           expect {
             receiver.foo
           }.to raise_error(/expected: 0 times.*received: 1 time/m)
+
+          reset receiver
         end
 
         it 'supports `to_not` as an alias for `not_to`' do
@@ -194,6 +196,8 @@ module RSpec
           expect {
             receiver.foo
           }.to raise_error(/expected: 0 times.*received: 1 time/m)
+
+          reset receiver
         end
 
         it 'allows the caller to constrain the received arguments' do
@@ -207,6 +211,8 @@ module RSpec
           expect {
             receiver.foo(:a)
           }.to raise_error(/expected: 0 times.*received: 1 time/m)
+
+          reset receiver
         end
 
         it 'prevents confusing double-negative expressions involving `never`' do
@@ -451,23 +457,23 @@ module RSpec
         end
 
         it 'supports `expect(...).not_to receive`' do
-          dbl = double
+          with_unfulfilled_double do |dbl|
+            framework.new.instance_exec do
+              expect(dbl).not_to receive(:foo)
+            end
 
-          framework.new.instance_exec do
-            expect(dbl).not_to receive(:foo)
+            expect { dbl.foo }.to raise_error(RSpec::Mocks::MockExpectationError)
           end
-
-          expect { dbl.foo }.to raise_error(RSpec::Mocks::MockExpectationError)
         end
 
         it 'supports `expect(...).to_not receive`' do
-          dbl = double
+          with_unfulfilled_double do |dbl|
+            framework.new.instance_exec do
+              expect(dbl).to_not receive(:foo)
+            end
 
-          framework.new.instance_exec do
-            expect(dbl).to_not receive(:foo)
+            expect { dbl.foo }.to raise_error(RSpec::Mocks::MockExpectationError)
           end
-
-          expect { dbl.foo }.to raise_error(RSpec::Mocks::MockExpectationError)
         end
       end
 

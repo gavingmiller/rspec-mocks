@@ -380,7 +380,9 @@ module RSpec
       context "expect_any_instance_of(...).not_to receive" do
         it "fails if the method is called" do
           expect_any_instance_of(klass).not_to receive(:existing_method)
-          expect { klass.new.existing_method }.to raise_error(RSpec::Mocks::MockExpectationError)
+          instance = klass.new
+          expect { instance.existing_method }.to raise_error(RSpec::Mocks::MockExpectationError)
+          reset instance
         end
 
         it "passes if no method is called" do
@@ -399,14 +401,17 @@ module RSpec
           expect(instance.foo).to eq(1)
           expect_any_instance_of(klass).not_to receive(:foo)
           expect { instance.foo }.to fail
+          reset instance
         end
 
         context "with constraints" do
           it "fails if the method is called with the specified parameters" do
             expect_any_instance_of(klass).not_to receive(:existing_method_with_arguments).with(:argument_one, :argument_two)
+            instance = klass.new
             expect {
-              klass.new.existing_method_with_arguments(:argument_one, :argument_two)
+              instance.existing_method_with_arguments(:argument_one, :argument_two)
             }.to raise_error(RSpec::Mocks::MockExpectationError)
+            reset instance
           end
 
           it "passes if the method is called with different parameters" do
@@ -794,12 +799,13 @@ module RSpec
             end
 
             it "fails for more than two invocations" do
+              expect_any_instance_of(klass).to receive(:foo).twice
+              instance = klass.new
               expect do
-                expect_any_instance_of(klass).to receive(:foo).twice
-                instance = klass.new
                 3.times { instance.foo }
                 verify instance
               end.to raise_error(RSpec::Mocks::MockExpectationError)
+              reset instance
             end
           end
 
@@ -908,10 +914,12 @@ module RSpec
             end
 
             it "fails on the first invocation" do
+              expect_any_instance_of(klass).to receive(:foo).never
+              instance = klass.new
               expect do
-                expect_any_instance_of(klass).to receive(:foo).never
-                klass.new.foo
+                instance.foo
               end.to raise_error(RSpec::Mocks::MockExpectationError)
+              reset instance
             end
 
             context "when combined with other expectations" do
