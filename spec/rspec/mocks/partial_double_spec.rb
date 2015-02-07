@@ -51,6 +51,8 @@ module RSpec
           RSpec::Mocks::MockExpectationError,
           /expected\: 0 times with any arguments\n    received\: 1 time/
         )
+
+        reset object
       end
 
       it "can expect a message and set a return value" do
@@ -91,6 +93,7 @@ module RSpec
         expect {
           object.foobar
         }.to raise_error(RSpec::Mocks::MockExpectationError)
+        reset object
       end
 
       it "uses reports nil in the error message" do
@@ -360,6 +363,7 @@ module RSpec
 
       it 'verifies arity range when matching arguments' do
         prevents { expect(object).to receive(:implemented).with('bogus') }
+        reset object
       end
 
       it 'allows a method defined with method_missing to be expected' do

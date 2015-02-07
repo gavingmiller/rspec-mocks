@@ -22,6 +22,7 @@ module RSpec
         expect {
           @double.do_something
         }.to raise_error(RSpec::Mocks::MockExpectationError)
+        reset @double
       end
 
       it "fails when exactly n times method is never called" do

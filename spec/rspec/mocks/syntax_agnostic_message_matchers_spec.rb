@@ -63,6 +63,7 @@ module RSpec
           ::RSpec::Mocks.expect_message(subject, :foo).never
           subject.foo
         }.to raise_error(/expected.*0 times/)
+        reset subject
       end
 
       it "sets up basic message expectation, verifies as called" do

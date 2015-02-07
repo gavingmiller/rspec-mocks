@@ -782,12 +782,13 @@ module RSpec
             end
 
             it "fails for more than one invocation" do
+              expect_any_instance_of(klass).to receive(:foo).once
+              instance = klass.new
               expect do
-                expect_any_instance_of(klass).to receive(:foo).once
-                instance = klass.new
                 2.times { instance.foo }
                 verify instance
               end.to raise_error(RSpec::Mocks::MockExpectationError)
+              reset instance
             end
           end
 
@@ -817,12 +818,13 @@ module RSpec
             end
 
             it "fails for more than three invocations" do
+              expect_any_instance_of(klass).to receive(:foo).thrice
+              instance = klass.new
               expect do
-                expect_any_instance_of(klass).to receive(:foo).thrice
-                instance = klass.new
                 4.times { instance.foo }
                 verify instance
               end.to raise_error(RSpec::Mocks::MockExpectationError)
+              reset instance
             end
 
             it "fails for less than three invocations" do
@@ -852,12 +854,13 @@ module RSpec
             end
 
             it "fails for n invocations where n > 3" do
+              expect_any_instance_of(klass).to receive(:foo).exactly(3).times
+              instance = klass.new
               expect do
-                expect_any_instance_of(klass).to receive(:foo).exactly(3).times
-                instance = klass.new
                 4.times { instance.foo }
                 verify instance
               end.to raise_error(RSpec::Mocks::MockExpectationError)
+              reset instance
             end
           end
 
@@ -898,12 +901,13 @@ module RSpec
             end
 
             it "fails for n invocations where n > 3" do
+              expect_any_instance_of(klass).to receive(:foo).at_most(3).times
+              instance = klass.new
               expect do
-                expect_any_instance_of(klass).to receive(:foo).at_most(3).times
-                instance = klass.new
                 4.times { instance.foo }
                 verify instance
               end.to raise_error(RSpec::Mocks::MockExpectationError)
+              reset instance
             end
           end
 

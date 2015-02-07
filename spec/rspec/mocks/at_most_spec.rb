@@ -79,6 +79,7 @@ module RSpec
         expect {
           @double.do_something
         }.to raise_error(/expected: at most 2 times.*received: 3 times/m)
+        reset @double
       end
 
       it "fails fast when at_most(:once) and is called twice" do
@@ -87,6 +88,7 @@ module RSpec
         expect {
           @double.do_something
         }.to raise_error(/expected: at most 1 time.*received: 2 times/m)
+        reset @double
       end
 
       it "fails fast when at_most(:twice) and is called three times" do
@@ -96,6 +98,7 @@ module RSpec
         expect {
           @double.do_something
         }.to raise_error(/expected: at most 2 times.*received: 3 times/m)
+        reset @double
       end
 
       it "fails fast when at_most(:thrice) and is called four times" do
@@ -106,6 +109,7 @@ module RSpec
         expect {
           @double.do_something
         }.to raise_error(/expected: at most 3 times.*received: 4 times/m)
+        reset @double
       end
 
     end

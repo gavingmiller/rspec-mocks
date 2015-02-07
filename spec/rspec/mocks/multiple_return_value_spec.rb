@@ -124,6 +124,7 @@ module RSpec
         @double.do_something
         @double.do_something
         expect { @double.do_something }.to raise_error
+        reset @double
       end
     end
   end

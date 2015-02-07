@@ -14,6 +14,8 @@ module RSpec
         expect {
           Foo.foo
         }.to raise_error(RSpec::Mocks::MockExpectationError)
+
+        reset Foo
       end
     end
   end
